@@ -1,6 +1,6 @@
 package Eval::Closure;
 BEGIN {
-  $Eval::Closure::VERSION = '0.01';
+  $Eval::Closure::VERSION = '0.02';
 }
 use strict;
 use warnings;
@@ -24,13 +24,20 @@ sub eval_closure {
     $args{source} = _canonicalize_source($args{source});
     _validate_env($args{environment} ||= {});
 
-    $args{source} = _line_directive($args{description}) . $args{source}
+    $args{source} = _line_directive(@args{qw(line description)})
+                  . $args{source}
         if defined $args{description};
 
     my ($code, $e) = _clean_eval_closure(@args{qw(source environment)});
 
-    croak("Failed to compile source: $e\n\nsource:\n$args{source}")
-        unless $code;
+    if (!$code) {
+        if ($args{terse_error}) {
+            die "$e\n";
+        }
+        else {
+            croak("Failed to compile source: $e\n\nsource:\n$args{source}")
+        }
+    }
 
     return $code;
 }
@@ -76,9 +83,11 @@ sub _validate_env {
 }
 
 sub _line_directive {
-    my ($description) = @_;
+    my ($line, $description) = @_;
 
-    return qq{#line 1 "$description"\n};
+    $line = 1 unless defined($line);
+
+    return qq{#line $line "$description"\n};
 }
 
 sub _clean_eval_closure {
@@ -155,7 +164,7 @@ Eval::Closure - safely and cleanly create closures via string eval
 
 =head1 VERSION
 
-version 0.01
+version 0.02
 
 =head1 SYNOPSIS
 
@@ -225,7 +234,18 @@ will show up as "(eval n)", where 'n' is a sequential identifier for every
 string eval that has happened so far in the program. Passing a C<description>
 parameter lets you override that to something more useful (for instance,
 L<Moose> overrides the description for accessors to something like "accessor
-foo at MyClass.pm, like 123").
+foo at MyClass.pm, line 123").
+
+=item line
+
+This lets you override the particular line number that appears in backtraces,
+much like the C<description> option. The default is 1.
+
+=item terse_error
+
+Normally, this function appends the source code that failed to compile, and
+prepends some explanatory text. Setting this option to true suppresses that
+behavior so you get only the compilation error that Perl actually reported.
 
 =back
 
@@ -284,7 +304,7 @@ This module is a factoring out of code that used to live here
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2010 by Jesse Luehrs.
+This software is copyright (c) 2011 by Jesse Luehrs.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

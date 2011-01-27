@@ -28,7 +28,7 @@ my %WriteMakefileArgs = (
     'Sub::Exporter' => '0',
     'Try::Tiny' => '0'
   },
-  'VERSION' => '0.01',
+  'VERSION' => '0.02',
   'test' => {
     'TESTS' => 't/*.t'
   }
