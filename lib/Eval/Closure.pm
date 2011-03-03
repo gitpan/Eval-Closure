@@ -1,6 +1,6 @@
 package Eval::Closure;
 BEGIN {
-  $Eval::Closure::VERSION = '0.02';
+  $Eval::Closure::VERSION = '0.03';
 }
 use strict;
 use warnings;
@@ -26,7 +26,7 @@ sub eval_closure {
 
     $args{source} = _line_directive(@args{qw(line description)})
                   . $args{source}
-        if defined $args{description};
+        if defined $args{description} && !($^P & 0x10);
 
     my ($code, $e) = _clean_eval_closure(@args{qw(source environment)});
 
@@ -164,7 +164,7 @@ Eval::Closure - safely and cleanly create closures via string eval
 
 =head1 VERSION
 
-version 0.02
+version 0.03
 
 =head1 SYNOPSIS
 

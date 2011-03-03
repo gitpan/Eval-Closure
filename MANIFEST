@@ -14,6 +14,7 @@ t/03-description.t
 t/04-canonicalize-source.t
 t/05-memoize.t
 t/10-errors.t
+t/11-debugger.t
 t/release-eol.t
 t/release-no-tabs.t
 t/release-pod-coverage.t
