@@ -1,6 +1,6 @@
 package Eval::Closure;
 BEGIN {
-  $Eval::Closure::VERSION = '0.03';
+  $Eval::Closure::VERSION = '0.04';
 }
 use strict;
 use warnings;
@@ -12,7 +12,6 @@ use Sub::Exporter -setup => {
 
 use Carp;
 use overload ();
-use Memoize;
 use Scalar::Util qw(reftype);
 use Try::Tiny;
 
@@ -113,14 +112,23 @@ sub _clean_eval_closure {
     return ($code, $e);
 }
 
-sub _make_compiler {
-    local $@;
-    local $SIG{__DIE__};
-    my $compiler = eval _make_compiler_source(@_);
-    my $e = $@;
-    return ($compiler, $e);
+{
+    my %compiler_cache;
+
+    sub _make_compiler {
+        my $source = _make_compiler_source(@_);
+
+        unless (exists $compiler_cache{$source}) {
+            local $@;
+            local $SIG{__DIE__};
+            my $compiler = eval $source;
+            my $e = $@;
+            $compiler_cache{$source} = [ $compiler, $e ];
+        }
+
+        return @{ $compiler_cache{$source} };
+    }
 }
-memoize('_make_compiler');
 
 sub _make_compiler_source {
     my ($source, @capture_keys) = @_;
@@ -164,7 +172,7 @@ Eval::Closure - safely and cleanly create closures via string eval
 
 =head1 VERSION
 
-version 0.03
+version 0.04
 
 =head1 SYNOPSIS
 
