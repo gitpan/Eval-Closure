@@ -1,6 +1,6 @@
 package Eval::Closure;
 BEGIN {
-  $Eval::Closure::VERSION = '0.04';
+  $Eval::Closure::VERSION = '0.05';
 }
 use strict;
 use warnings;
@@ -151,6 +151,7 @@ sub _dump_source {
         Perl::Tidy::perltidy(
             source      => \$source,
             destination => \$output,
+            argv        => [],
         );
     }
     else {
@@ -172,7 +173,7 @@ Eval::Closure - safely and cleanly create closures via string eval
 
 =head1 VERSION
 
-version 0.04
+version 0.05
 
 =head1 SYNOPSIS
 
