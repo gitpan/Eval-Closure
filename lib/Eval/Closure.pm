@@ -1,6 +1,6 @@
 package Eval::Closure;
 BEGIN {
-  $Eval::Closure::VERSION = '0.05';
+  $Eval::Closure::VERSION = '0.06';
 }
 use strict;
 use warnings;
@@ -92,11 +92,12 @@ sub _line_directive {
 sub _clean_eval_closure {
      my ($source, $captures) = @_;
 
+    my @capture_keys = sort keys %$captures;
+
     if ($ENV{EVAL_CLOSURE_PRINT_SOURCE}) {
-        _dump_source(_make_compiler_source(@_));
+        _dump_source(_make_compiler_source($source, @capture_keys));
     }
 
-    my @capture_keys = sort keys %$captures;
     my ($compiler, $e) = _make_compiler($source, @capture_keys);
     my $code;
     if (defined $compiler) {
@@ -173,7 +174,7 @@ Eval::Closure - safely and cleanly create closures via string eval
 
 =head1 VERSION
 
-version 0.05
+version 0.06
 
 =head1 SYNOPSIS
 
