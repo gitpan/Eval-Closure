@@ -1,6 +1,6 @@
 package Eval::Closure;
-BEGIN {
-  $Eval::Closure::VERSION = '0.06';
+{
+  $Eval::Closure::VERSION = '0.07';
 }
 use strict;
 use warnings;
@@ -90,7 +90,7 @@ sub _line_directive {
 }
 
 sub _clean_eval_closure {
-     my ($source, $captures) = @_;
+    my ($source, $captures) = @_;
 
     my @capture_keys = sort keys %$captures;
 
@@ -113,28 +113,30 @@ sub _clean_eval_closure {
     return ($code, $e);
 }
 
-{
-    my %compiler_cache;
+sub _make_compiler {
+    my $source = _make_compiler_source(@_);
 
-    sub _make_compiler {
-        my $source = _make_compiler_source(@_);
-
-        unless (exists $compiler_cache{$source}) {
-            local $@;
-            local $SIG{__DIE__};
-            my $compiler = eval $source;
-            my $e = $@;
-            $compiler_cache{$source} = [ $compiler, $e ];
-        }
-
-        return @{ $compiler_cache{$source} };
-    }
+    return @{ _clean_eval($source) };
 }
+
+sub _clean_eval {
+    return eval <<EVAL;
+local \$@;
+local \$SIG{__DIE__};
+my \$compiler = eval \$_[0];
+my \$e = \$@;
+[ \$compiler, \$e ];
+EVAL
+}
+
+$Eval::Closure::SANDBOX_ID = 0;
 
 sub _make_compiler_source {
     my ($source, @capture_keys) = @_;
+    $Eval::Closure::SANDBOX_ID++;
     my $i = 0;
     return join "\n", (
+        "package Eval::Closure::Sandbox_$Eval::Closure::SANDBOX_ID;",
         'sub {',
         (map {
             'my ' . $_ . ' = ' . substr($_, 0, 1) . '{$_[' . $i++ . ']};'
@@ -174,7 +176,7 @@ Eval::Closure - safely and cleanly create closures via string eval
 
 =head1 VERSION
 
-version 0.06
+version 0.07
 
 =head1 SYNOPSIS
 
@@ -200,16 +202,13 @@ String eval is often used for dynamic code generation. For instance, C<Moose>
 uses it heavily, to generate inlined versions of accessors and constructors,
 which speeds code up at runtime by a significant amount. String eval is not
 without its issues however - it's difficult to control the scope it's used in
-(which determines which variables are in scope inside the eval), and it can be
-quite slow, especially if doing a large number of evals.
+(which determines which variables are in scope inside the eval), and it's easy
+to miss compilation errors, since eval catches them and sticks them in $@
+instead.
 
-This module attempts to solve both of those problems. It provides an
-C<eval_closure> function, which evals a string in a clean environment, other
-than a fixed list of specified variables. It also caches the result of the
-eval, so that doing repeated evals of the same source, even with a different
-environment, will be much faster (but note that the description is part of the
-string to be evaled, so it must also be the same (or non-existent) if caching
-is to work properly).
+This module attempts to solve these problems. It provides an C<eval_closure>
+function, which evals a string in a clean environment, other than a fixed list
+of specified variables. Compilation errors are rethrown automatically.
 
 =head1 FUNCTIONS
 
@@ -314,7 +313,7 @@ This module is a factoring out of code that used to live here
 
 =head1 COPYRIGHT AND LICENSE
 
-This software is copyright (c) 2011 by Jesse Luehrs.
+This software is copyright (c) 2012 by Jesse Luehrs.
 
 This is free software; you can redistribute it and/or modify it under
 the same terms as the Perl 5 programming language system itself.

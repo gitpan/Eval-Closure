@@ -9,28 +9,28 @@ use ExtUtils::MakeMaker 6.30;
 
 
 my %WriteMakefileArgs = (
-  'ABSTRACT' => 'safely and cleanly create closures via string eval',
-  'AUTHOR' => 'Jesse Luehrs <doy at tozt dot net>',
-  'BUILD_REQUIRES' => {
-    'Test::Fatal' => '0',
-    'Test::More' => '0.88',
-    'Test::Requires' => '0'
+  "ABSTRACT" => "safely and cleanly create closures via string eval",
+  "AUTHOR" => "Jesse Luehrs <doy at tozt dot net>",
+  "BUILD_REQUIRES" => {
+    "Test::Fatal" => 0,
+    "Test::More" => "0.88",
+    "Test::Requires" => 0
   },
-  'CONFIGURE_REQUIRES' => {
-    'ExtUtils::MakeMaker' => '6.30'
+  "CONFIGURE_REQUIRES" => {
+    "ExtUtils::MakeMaker" => "6.30"
   },
-  'DISTNAME' => 'Eval-Closure',
-  'EXE_FILES' => [],
-  'LICENSE' => 'perl',
-  'NAME' => 'Eval::Closure',
-  'PREREQ_PM' => {
-    'Scalar::Util' => '0',
-    'Sub::Exporter' => '0',
-    'Try::Tiny' => '0'
+  "DISTNAME" => "Eval-Closure",
+  "EXE_FILES" => [],
+  "LICENSE" => "perl",
+  "NAME" => "Eval::Closure",
+  "PREREQ_PM" => {
+    "Scalar::Util" => 0,
+    "Sub::Exporter" => 0,
+    "Try::Tiny" => 0
   },
-  'VERSION' => '0.06',
-  'test' => {
-    'TESTS' => 't/*.t'
+  "VERSION" => "0.07",
+  "test" => {
+    "TESTS" => "t/*.t"
   }
 );
 
