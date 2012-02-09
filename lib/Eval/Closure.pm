@@ -1,6 +1,6 @@
 package Eval::Closure;
 {
-  $Eval::Closure::VERSION = '0.07';
+  $Eval::Closure::VERSION = '0.08';
 }
 use strict;
 use warnings;
@@ -120,13 +120,11 @@ sub _make_compiler {
 }
 
 sub _clean_eval {
-    return eval <<EVAL;
-local \$@;
-local \$SIG{__DIE__};
-my \$compiler = eval \$_[0];
-my \$e = \$@;
-[ \$compiler, \$e ];
-EVAL
+    local $@;
+    local $SIG{__DIE__};
+    my $compiler = eval $_[0];
+    my $e = $@;
+    [ $compiler, $e ];
 }
 
 $Eval::Closure::SANDBOX_ID = 0;
@@ -176,7 +174,7 @@ Eval::Closure - safely and cleanly create closures via string eval
 
 =head1 VERSION
 
-version 0.07
+version 0.08
 
 =head1 SYNOPSIS
 
