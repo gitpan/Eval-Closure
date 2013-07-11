@@ -3,7 +3,7 @@ BEGIN {
   $Eval::Closure::AUTHORITY = 'cpan:DOY';
 }
 {
-  $Eval::Closure::VERSION = '0.09';
+  $Eval::Closure::VERSION = '0.10';
 }
 use strict;
 use warnings;
@@ -199,7 +199,7 @@ Eval::Closure - safely and cleanly create closures via string eval
 
 =head1 VERSION
 
-version 0.09
+version 0.10
 
 =head1 SYNOPSIS
 
@@ -314,19 +314,19 @@ You can also look for information at:
 
 =item * MetaCPAN
 
-L<https://metacpan.org/release/Reply>
+L<https://metacpan.org/release/Eval-Closure>
 
 =item * Github
 
-L<https://github.com/doy/reply>
+L<https://github.com/doy/eval-closure>
 
 =item * RT: CPAN's request tracker
 
-L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Reply>
+L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Eval-Closure>
 
 =item * CPAN Ratings
 
-L<http://cpanratings.perl.org/d/Reply>
+L<http://cpanratings.perl.org/d/Eval-Closure>
 
 =back
 

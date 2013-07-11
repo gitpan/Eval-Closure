@@ -33,7 +33,7 @@ resources:
   bugtracker: https://github.com/doy/eval-closure/issues
   homepage: http://metacpan.org/release/Eval-Closure
   repository: git://github.com/doy/eval-closure.git
-version: 0.09
+version: 0.10
 x_Dist_Zilla:
   perl:
     version: 5.018000
