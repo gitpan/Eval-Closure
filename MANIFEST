@@ -10,6 +10,7 @@ lib/Eval/Closure.pm
 t/00-compile.t
 t/basic.t
 t/canonicalize-source.t
+t/close-over-nonref.t
 t/close-over.t
 t/compiling-package.t
 t/debugger.t

@@ -28,6 +28,7 @@
       },
       "runtime" : {
          "recommends" : {
+            "Devel::LexAlias" : "0.05",
             "Perl::Tidy" : "0"
          },
          "requires" : {
@@ -64,7 +65,7 @@
          "web" : "https://github.com/doy/eval-closure"
       }
    },
-   "version" : "0.10",
+   "version" : "0.11",
    "x_Dist_Zilla" : {
       "perl" : {
          "version" : "5.018000"
@@ -304,7 +305,8 @@
    "x_authority" : "cpan:DOY",
    "x_contributors" : [
       "Dave Rolsky <autarch@urth.org>",
-      "Shawn M Moore <sartak@bestpractical.com>"
+      "Shawn M Moore <sartak@bestpractical.com>",
+      "Toby Inkster <mail@tobyinkster.co.uk>"
    ]
 }
 
